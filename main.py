@@ -14,7 +14,7 @@ class Character:
     SPECIAL_BUFF = 15
     BRIEF_DESC_CHAR_CLASS = 'отважный любитель приключений'
 
-    __init__(self, name):
+    def __init__(self, name):
         self.name = name
 
     def attack(self):
@@ -55,3 +55,40 @@ class Healer(Character):
     RANGE_VALUE_DEFENCE = (2, 5)
     SPECIAL_BUFF = DEFAULT_DEFENCE + 30
     SPECIAL_SKILL = 'Защита' 
+
+def choice_char_class(char_name: str) -> Character:
+    """
+    Возвращает строку с выбранным
+    классом персонажа.
+    """
+    # Добавили словарь, в котором соотносится ввод пользователя и класс персонажа.
+    game_classes = {'warrior': Warrior, 'mage': Mage, 'healer': Healer}
+    
+    approve_choice: str  = None
+    
+    while approve_choice != 'y':
+        selected_class = input('Введи название персонажа, '
+                           'за которого хочешь играть: Воитель — warrior, '
+                           'Маг — mage, Лекарь — healer: ')
+        char_class: Character = game_classes[selected_class](char_name)
+        # Вывели в терминал описание персонажа.
+        print(char_class)
+        approve_choice = input('Нажми (Y), чтобы подтвердить выбор, '
+                               'или любую другую кнопку, '
+                               'чтобы выбрать другого персонажа ').lower()
+    return char_class
+
+def start_training(char_class: Character) -> str:
+    """
+    Принимает на вход имя и класс персонажа.
+    Возвращает сообщения о результатах цикла тренировки персонажа.
+    """
+    game_commands = {'attack': attack, 'defence': defence, 'special': special}
+    cmd = None
+    while cmd != 'skip':
+        if cmd in game_commands:
+            selected_command = input ('Введи одну из команд: attack — чтобы атаковать противника, '
+                            'defence — чтобы блокировать атаку противника или '
+                            'special — чтобы использовать свою суперсилу.')
+            char_command = game_commands[selected_command]
+    print('Если не хочешь тренироваться, введи команду skip.')
